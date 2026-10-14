@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: DLQ-orders
+
+  # Load local secrets from .env (gitignored); real env vars still take precedence
+  config:
+    import: optional:file:.env[.properties]
+
+  # H2 Database configuration
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  # JPA / Hibernate configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+  # Enable H2 Console (Accessible at http://localhost:8095/h2-console)
+  h2:
+    console:
+      enabled: true
+  # SQS properties
+  cloud:
+    aws:
+      region:
+        static: ${AWS_REGION:us-east-1}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+# SQS queue name
+app:
+  sqs:
+    queue-name: test-queue
+    dlq-queue-name: test-queue-dlq
+
+server:
+  port: 8095
